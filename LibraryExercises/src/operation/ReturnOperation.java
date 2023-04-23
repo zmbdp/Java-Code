@@ -19,7 +19,9 @@ public class ReturnOperation implements IOperation{
             Book book = bookList.getBooks(i);
             if (book.getName().equals(name)) {
                 book.setBorrowed(false);
+                return;
             }
         }
+        System.out.println("未找到你需要还的书籍！");
     }
 }

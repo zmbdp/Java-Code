@@ -18,8 +18,13 @@ public class BorrowOperation implements IOperation{
         for (int i = 0; i < count; i++) {
             Book book = bookList.getBooks(i);
             if (book.getName().equals(name)) {
+                if (book.isBorrowed()) {
+                    System.out.println("该书已经被借出！");
+                }
                 book.setBorrowed(true);
+                return;
             }
         }
+        System.out.println("未找到你需要借的书书籍！");
     }
 }
