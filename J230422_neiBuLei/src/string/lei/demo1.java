@@ -97,6 +97,7 @@ public class demo1 {
         //比较是否相同
         String str1 = new String("abcde");
         String str2 = new String("abcde");
+        str1.equals(str2);
         System.out.println(str1 == str2);
         System.out.println("==================");
         String str3 = "abc";
