@@ -6,7 +6,7 @@ public class demo1 {
     public static void main(String[] args) {
         //删减下标值
         String str1 = "Hello World Hello Bit.";
-        String ret = str1.substring(1);//删除1下标的元素
+        String ret = str1.substring(10);//删除10下标之前的元素
         System.out.println(ret);
         ret = str1.substring(1,5);//删除1下标之前，5下标之后的元素，包左不包右
         System.out.println(ret);
