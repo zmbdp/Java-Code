@@ -266,8 +266,7 @@ public class MyLinkedList {
             phead.val = 0;
             phead = pheadNext;
         }
-        head = null;
-        phead = null;
+        head = phead = null;
     }
 
 }
