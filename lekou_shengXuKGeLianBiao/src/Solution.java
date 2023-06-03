@@ -13,67 +13,78 @@ class ListNode {
         this.val = val;
         this.next = next;
     }
+
+    @Override
+    public String toString() {
+        return  val + "," + next;
+    }
 }
 
 public class Solution {
     public static ListNode mergeKLists(ListNode[] lists) {
-        //思路：
-        //先让第一个链表的第一个数字进去
-        //然后判断后面这些链表的0下标的数字，
-        //从头开始找，一直找到大于它的数字，放到这个数字的前面，就是phead.next.val
-        //如果是插入第一个，插入中间，插入最后要分开写，情况不一样
-        //所以要定义一个变量，i记录到了第几个链表
-        //如果中间某个ListNode[i] == null 了，那就直接i++跳到下一个链表，并且i不能大于lists.length
+
+        /**
+         * 思路：
+         * 把第一个链表放过去，
+         * 然后之后的链表一个一个插入
+         */
+        if (lists.length == 1) {
+            return lists[0];
+        }
         ListNode head = new ListNode(0);
         if (lists.length == 0) {
-            return head;
+            return head.next;
         }
         int i = 0;
+        // 如果有节点是空的，那就走到不是空的再出来
+        while ((i < lists.length) && (lists[i] == null)) {
+            i++;
+        }
+        if (i >= lists.length) {
+            return head.next;
+        }
+        head = lists[i];
+        i++;
 
-        head.next = lists[i];
-        lists[i] = lists[i].next;
         while (i < lists.length) {
-            //每次都重新开始
-            //从开始一个一个走
-            ListNode phead = head;
-            boolean flag = true;
-            //每次拿出i下标的链表插入;
-            while (phead.next != null) {
-                ListNode pNext = phead.next;
-                //如果头节点比它还大
-                if (head.next.val > lists[i].val) {
-                    //进来改变布尔值
-                    flag = false;
-                    //然后把[i]这个下标的链表的节点拿出来
-                    ListNode top = lists[i];
-                    //让这个节点往后走
-                    lists[i] = lists[i].next;
-                    //然后头下一个给这个节点
-                    head.next = top;
-                    top.next = null;
+            // 升序
+            ListNode pli = lists[i]; // 链表指针
+            ListNode phead = head;// head指针
+            while (pli != null) {
+                phead = head;
+                // 如果是头插
+                if (head.val > pli.val) {
+                    ListNode tmp = pli.next;
+                    pli.next = head;
+                    head = pli;
+                    pli = tmp;
                 }
-                //如果中间的比他大
-                if (pNext.val > lists[i].val) {
-                    //进来改变布尔值
-                    flag = false;
-                    //先定义一个节点存好这个头
-                    ListNode top = lists[i];
-                    lists[i] = lists[i].next;
-                    phead.next = top;
-                    top.next = null;
+                // 如果是其他地方插
+                else {
+                    while ((phead != null) && (phead.next != null) && (phead.next.val < pli.val)) {
+                        phead = phead.next;
+                    }
+                    // 出来就两个，一个是head.next的值大于 pli的值了
+                    // 一个就是head走到头了
+                    // 如果是中间插
+                    if ((phead.next != null) && (phead.next.val >= pli.val)) {
+                        ListNode tmp = pli;
+                        pli = pli.next;
+                        tmp.next = phead.next;
+                        phead.next = tmp;
+                    }
+                    // 如果是尾插
+                    if (phead.next == null && phead.val <= pli.val) {
+                        phead.next = pli;
+                        pli = pli.next;
+                        phead = phead.next;
+                        phead.next = null;
+                    }
                 }
-                if (phead.next != null){
-                    phead = phead.next;
-                }
-                //如果走到最后都是比lists【i】的小的，就尾插，写一个布尔值判断
-            }
-            //出来了说明还差最后一个节点，如果还没插入就尾插
-            if (flag) {
-                phead.next = lists[i];
             }
             i++;
         }
-        return head.next;
+        return head;
     }
 
     public static void main(String[] args) {
@@ -97,11 +108,76 @@ public class Solution {
         lists[0] = list1;
         lists[1] = list4;
         lists[2] = list7;
-        ListNode head = mergeKLists(lists);
-        int i = 7;
-        while (head != null) {
-            System.out.print(head.val + "->");
-            head = head.next;
+
+        ListNode list9 = null;
+        ListNode[] lists1 = {list9};
+        ListNode list10 = new ListNode(0);
+        ListNode list11 = new ListNode(2);
+        ListNode list12 = new ListNode(5);
+        list10.next = list11;
+        list11.next = list12;
+        ListNode[] lists2 = {list10};
+        ListNode[] lists3 = {list10, list1};
+        ListNode list13 = new ListNode(1);
+        ListNode list14 = new ListNode(0);
+        ListNode[] lists4 = {list13, list14};
+
+        ListNode list15 = new ListNode(-2);
+
+        ListNode list16 = new ListNode(-3);
+        ListNode list17 = new ListNode(-2);
+        ListNode list18 = new ListNode(1);
+        list16.next = list17;
+        list17.next = list18;
+        ListNode[] lists5 = {null, list15, list16};
+
+        ListNode list19 = new ListNode(1);
+        ListNode list20 = new ListNode(3);
+        ListNode list21 = new ListNode(4);
+        ListNode list22 = new ListNode(6);
+        ListNode list23 = new ListNode(8);
+        ListNode list24 = new ListNode(9);
+        ListNode list25 = new ListNode(12);
+        list19.next = list20;
+        list20.next = list21;
+        list21.next = list22;
+        list22.next = list23;
+        list23.next = list24;
+        list24.next = list25;
+
+        ListNode list26 = new ListNode(1);
+        ListNode list27 = new ListNode(2);
+        ListNode list28 = new ListNode(5);
+        ListNode list29 = new ListNode(7);
+        ListNode list30 = new ListNode(11);
+        ListNode list31 = new ListNode(21);
+        ListNode list32 = new ListNode(24);
+        list26.next = list27;
+        list27.next = list28;
+        list28.next = list29;
+        list29.next = list30;
+        list30.next = list31;
+        list31.next = list32;
+
+        ListNode list33 = new ListNode(-4);
+        ListNode list34 = new ListNode(0);
+        ListNode list35 = new ListNode(4);
+        ListNode list36 = new ListNode(7);
+        ListNode list37 = new ListNode(10);
+        ListNode list38 = new ListNode(14);
+        ListNode list39 = new ListNode(22);
+        ListNode list40 = new ListNode(29);
+        list33.next = list34;
+        list34.next = list35;
+        list35.next = list36;
+        list36.next = list37;
+        list37.next = list38;
+        list38.next = list39;
+        list39.next = list40;
+        ListNode[] lists6 = {list19, list26, list33};
+        ListNode head = mergeKLists(lists6);
+        if (head != null){
+            System.out.print(head.toString());
         }
     }
 
